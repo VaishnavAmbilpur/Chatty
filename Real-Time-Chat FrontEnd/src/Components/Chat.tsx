@@ -13,7 +13,7 @@ const Chat = () => {
  let count :number =0;
  useEffect(() => {
 
-   const ws = new WebSocket('ws://localhost:8080');
+   const ws = new WebSocket('https://chatty-bxj0.onrender.com/');
    try{
  
    ws.onmessage = (event) => {
