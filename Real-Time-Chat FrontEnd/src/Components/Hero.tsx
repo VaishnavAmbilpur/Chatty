@@ -42,7 +42,7 @@ const Hero = () => {
     <div className='font-Josefin bg-zinc-950 border-1 border-zinc-700 my-auto min-w-auto max-h-auto md:min-w-auto md:max-h-auto rounded-md text-white'>
         <div className='text-3xl tracking-tighter p-4 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col'>
          <div className='flex items-center gap-x-3'><ChatIcon/>
-          Real-Time-Chat</div> 
+          Chatty</div> 
           <div className='text-sm text-zinc-500 tracking-normal'>Temperory Chat Room</div>
         </div>
         <div className='m-3 font-Josefin hover:bg-slate-100 rounded-md p-2 text-zinc-950 font-bold flex  cursor-pointer justify-center bg-white' onClick={()=>{random()}}>
