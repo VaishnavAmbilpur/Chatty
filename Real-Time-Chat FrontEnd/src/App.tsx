@@ -8,7 +8,7 @@ import { BrowserRouter,Route,Routes } from 'react-router'
 
 function App() {
   const [code, setcode] = useState<string>("")
-  const [users,setUser] = useState<string>("");
+
   return (
     <>
       <MyGlobalContext.Provider value={{code,setcode}}>
