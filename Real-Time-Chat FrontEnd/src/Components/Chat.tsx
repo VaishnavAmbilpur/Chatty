@@ -5,26 +5,25 @@ import { useGlobalContext } from './Mycontext'
 const Chat = () => {
   const [messages, setMessages] = useState(["Hello From Server"])
    const { code } = useGlobalContext()
- // Refs to store WebSocket connection and input element
+
  //@ts-ignore
- const wsRef = useRef(); // WebSocket connection reference
+ const wsRef = useRef(); 
  //@ts-ignore
- const inputRef = React.createRef<HTMLInputEelement>(); // Input field reference
+ const inputRef = React.createRef<HTMLInputEelement>(); 
  let count :number =0;
  useEffect(() => {
-   // Create new WebSocket connection to local server
+
    const ws = new WebSocket('ws://localhost:8080');
    try{
-   // Handle incoming messages from server
+ 
    ws.onmessage = (event) => {
-     setMessages(m => [...m, event.data]) // Add new message to messages array
+     setMessages(m => [...m, event.data])
    }
 
-   // Store WebSocket connection in ref for later use
    //@ts-ignore
    wsRef.current = ws;
    let id : string = code;
-   // When connection opens, send join room message
+
    ws.onopen = () => {
      ws.send(JSON.stringify({
        type:"join",
@@ -42,7 +41,7 @@ const Chat = () => {
 
                 ws.close();
         }
- }, []) // Empty depende
+ }, []) 
   return (
     <div className='font-Josefin bg-zinc-950 border-1 border-zinc-700 my-auto min-w-auto max-h-auto md:min-w-auto md:max-h-auto overflow-hidden rounded-md text-white m-10 overflow-x-hidden overflow-y-hidden'>
         <div className='text-3xl tracking-tighter p-4 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col'>

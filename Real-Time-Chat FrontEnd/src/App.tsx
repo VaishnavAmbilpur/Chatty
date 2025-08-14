@@ -3,7 +3,7 @@ import './App.css'
 import Chat from './Components/Chat'
 import Hero from './Components/Hero'
 import { MyGlobalContext } from './Components/Mycontext'
-import { MynumberContext } from './Components/Mynumber'
+
 import { BrowserRouter,Route,Routes } from 'react-router'
 
 function App() {
@@ -11,7 +11,6 @@ function App() {
   const [users,setUser] = useState<string>("");
   return (
     <>
-     <MynumberContext.Provider value={{users,setUser}}>
       <MyGlobalContext.Provider value={{code,setcode}}>
  <BrowserRouter>
       <Routes>
@@ -24,7 +23,6 @@ function App() {
       </Routes>   
       </BrowserRouter>
      </MyGlobalContext.Provider>
-     </MynumberContext.Provider>
       
 
    

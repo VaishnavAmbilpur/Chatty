@@ -4,7 +4,7 @@ export type InputContent = {
   setinput:(c: string) => void
 }
 export const MyInputContext = createContext<InputContent>({
-input: '', // set a default value
+input: '', 
 setinput: () => {},
 })
 export const useInputContext = () => useContext(MyInputContext)
