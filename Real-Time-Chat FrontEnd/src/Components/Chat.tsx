@@ -62,7 +62,7 @@ const Chat = () => {
             <span>Room Code : {code}</span>
         </div>
         <div className='p-2 rounded-lg'>
-          <div ref={mesRef} className='h-[400px] flex flex-col gap-y-0.5 w-[350px] overflow-y-scroll'>
+          <div ref={mesRef} className='h-[400px] flex flex-col gap-y-0.5 w-[350px] overflow-x-hidden overflow-y-scroll'>
        {/* Display all messages */}
        {messages.map(message => <div className='m-2 w-fit flex flex-col'> 
          <span className='bg-white text-black rounded f p-4 '>            
