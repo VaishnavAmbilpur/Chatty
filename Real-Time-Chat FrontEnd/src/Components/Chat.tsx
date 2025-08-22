@@ -53,10 +53,10 @@ const Chat = () => {
             <span>Room Code : {code}</span>
         </div>
         <div className='p-2 rounded-lg'>
-          <div className='h-[400px] overflow-y-scroll'>
+          <div className='h-[400px] flex flex-col w-[350px] overflow-y-scroll'>
        {/* Display all messages */}
-       {messages.map(message => <div className='m-8'> 
-         <span className='bg-white text-black rounded p-4 '>            
+       {messages.map(message => <div className='m-8 w-fit flex flex-col'> 
+         <span className='bg-white text-black rounded f p-4 '>            
            {message} 
          </span>
        </div>)}
@@ -68,12 +68,14 @@ const Chat = () => {
               // @ts-ignore
             const message = inputRef.current?.value;
             console.log(message);
+            inputRef.current.tagert = ""
             // @ts-ignore
             wsRef.current.send(JSON.stringify({
                type: "chat",
            payload: {
              message: message
            }
+           
            }))
            }}>
              Send</button> 
