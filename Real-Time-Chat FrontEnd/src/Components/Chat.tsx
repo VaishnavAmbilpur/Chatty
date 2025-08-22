@@ -5,11 +5,11 @@ import { useGlobalContext } from './Mycontext'
 const Chat = () => {
   const [messages, setMessages] = useState(["Hello From Server"])
    const { code } = useGlobalContext()
-
+  
  //@ts-ignore
  const wsRef = useRef(); 
  //@ts-ignore
- const inputRef = React.createRef<HTMLInputEelement>(); 
+ const inputRef = React.createRef<HTMLInputEelement>(" "); 
  let count :number =0;
  useEffect(() => {
 
@@ -42,6 +42,7 @@ const Chat = () => {
                 ws.close();
         }
  }, []) 
+ 
   return (
     <div className='font-Josefin bg-zinc-950 border-1 border-zinc-700 my-auto min-w-auto max-h-auto md:min-w-auto md:max-h-auto overflow-hidden rounded-md text-white m-10 overflow-x-hidden overflow-y-hidden'>
         <div className='text-3xl tracking-tighter p-4 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col'>
@@ -53,9 +54,9 @@ const Chat = () => {
             <span>Room Code : {code}</span>
         </div>
         <div className='p-2 rounded-lg'>
-          <div className='h-[400px] flex flex-col w-[350px] overflow-y-scroll'>
+          <div className='h-[400px] flex flex-col gap-y-0.5 w-[350px] overflow-y-scroll'>
        {/* Display all messages */}
-       {messages.map(message => <div className='m-8 w-fit flex flex-col'> 
+       {messages.map(message => <div className='m-2 w-fit flex flex-col'> 
          <span className='bg-white text-black rounded f p-4 '>            
            {message} 
          </span>
@@ -68,7 +69,9 @@ const Chat = () => {
               // @ts-ignore
             const message = inputRef.current?.value;
             console.log(message);
-            inputRef.current.tagert = ""
+             if (inputRef.current) {
+                  inputRef.current.value = '';
+              }
             // @ts-ignore
             wsRef.current.send(JSON.stringify({
                type: "chat",
