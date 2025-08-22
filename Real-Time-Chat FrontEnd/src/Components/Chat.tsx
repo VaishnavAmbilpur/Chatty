@@ -48,6 +48,9 @@ const Chat = () => {
                 ws.close();
         }
  }, []) 
+ useEffect(()=>{
+   scrollToBottomDiv();
+ },[messages])
   return (
     <div className='font-Josefin bg-zinc-950 border-1 border-zinc-700 my-auto min-w-auto max-h-auto md:min-w-auto md:max-h-auto overflow-hidden rounded-md text-white m-10 overflow-x-hidden overflow-y-hidden'>
         <div className='text-3xl tracking-tighter p-4 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col'>
