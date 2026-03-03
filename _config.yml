@@ -1,0 +1,8 @@
+exclude:
+  - node_modules
+  - "Real-Time-Chat FrontEnd/node_modules"
+  - "Real-time-Chat/node_modules"
+  - package-lock.json
+  - .github
+  - .gitignore
+  - .nojekyll
