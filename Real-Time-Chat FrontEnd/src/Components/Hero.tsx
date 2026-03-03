@@ -16,7 +16,7 @@ const Hero = () => {
   const [alert, setalert] = useState(null);
   const code = userNameStore((state) => state.user);
   const setcode = userNameStore((state) => state.setuser);
-  const name = useUserCodeStore((state) => state.code);
+
   const setname = useUserCodeStore((state) => state.setcode);
   const letters: string[] = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', "I", "J", "K", 'L', "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
   function random(): void {
