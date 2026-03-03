@@ -1,7 +1,4 @@
-/**
- * End-to-End Encryption Utilities using Web Crypto API.
- * Uses AES-GCM for encryption and PBKDF2 for key derivation from the room code.
- */
+
 
 const ITERATIONS = 100000;
 const SALT = new TextEncoder().encode("chatty-e2ee-salt"); // Static salt for simplicity in this demo
