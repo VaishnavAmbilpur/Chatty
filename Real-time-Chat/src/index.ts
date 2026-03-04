@@ -1,5 +1,25 @@
 import { WebSocketServer, WebSocket } from "ws";
 import http from "http";
+import fs from "fs";
+import path from "path";
+
+// Manual .env parsing to avoid dependency overhead/issues
+try {
+    const envPath = path.resolve(__dirname, "../.env");
+    if (fs.existsSync(envPath)) {
+        const envContent = fs.readFileSync(envPath, "utf8");
+        envContent.split("\n").forEach((line) => {
+            const [key, ...valueParts] = line.split("=");
+            const keyTrimmed = key?.trim();
+            const value = valueParts.join("=").trim().replace(/^["']|["']$/g, "");
+            if (keyTrimmed && value) {
+                process.env[keyTrimmed] = value;
+            }
+        });
+    }
+} catch (e) {
+    console.error("Error loading .env manually:", e);
+}
 
 const server = http.createServer((req, res) => {
     if (req.url === "/health") {
@@ -17,6 +37,16 @@ const port = process.env.PORT || 8080;
 server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
+
+// Self-ping mechanism to keep the server awake on Render
+const url = process.env.URL || `http://localhost:${port}`;
+setInterval(() => {
+    http.get(`${url}/health`, (res) => {
+        console.log(`Self-ping status: ${res.statusCode}`);
+    }).on("error", (err) => {
+        console.error("Self-ping error:", err.message);
+    });
+}, 14 * 60 * 1000); // Ping every 14 minutes
 
 interface User {
     socket: WebSocket;

@@ -17,5 +17,9 @@
     "@types/ws": "^8.18.1",
     "typescript": "^5.8.3",
     "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/dotenv": "^8.2.0"
   }
 }
