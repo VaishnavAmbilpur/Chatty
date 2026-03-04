@@ -1,7 +1,8 @@
 
 
-import { Users, Info, Smiley, Clock, PaperPlaneRight } from '@phosphor-icons/react'
+import { Users, Info, Smiley, Clock, PaperPlaneRight, SignOut } from '@phosphor-icons/react'
 import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { userNameStore } from '../store'
 import { useUserCodeStore } from '../store'
 import ReactMarkdown from 'react-markdown'
@@ -22,6 +23,7 @@ const Chat = () => {
   const name = useUserCodeStore((state) => state.code);
   const code = userNameStore((state) => state.user);
   const { roomUsers, setRoomUsers, typingUsers, setTypingUsers } = useUserCodeStore();
+  const navigate = useNavigate();
 
   const [showEmojis, setShowEmojis] = useState(false)
   const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes
@@ -180,6 +182,13 @@ const Chat = () => {
 
   const getInitials = (n: string) => (n || "A").split(' ').map(s => s[0]).join('').toUpperCase().slice(0, 2);
 
+  const handleLeaveRoom = () => {
+    if (wsRef.current) {
+      wsRef.current.close();
+    }
+    navigate('/');
+  };
+
 
   return (
     <div className='flex gap-x-4 max-w-5xl w-full h-[600px] items-center justify-center'>
@@ -203,6 +212,13 @@ const Chat = () => {
                 className={`p-2 rounded-lg transition-all ${showUsers ? 'bg-white text-zinc-950' : 'hover:bg-white/10'}`}
               >
                 <Users size={20} />
+              </button>
+              <button
+                onClick={handleLeaveRoom}
+                className="p-2 rounded-lg transition-all hover:bg-white/10 text-zinc-400 hover:text-red-400"
+                title="Leave Room"
+              >
+                <SignOut size={20} />
               </button>
             </div>
           </div>
