@@ -49,7 +49,16 @@ const Chat = () => {
 
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080');
+    const defaultWsUrl = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const backendUrl = import.meta.env.VITE_WS_URL || 'localhost:8080';
+
+    // Ensure the URL has the correct protocol prefix if it's just a hostname/port
+    const finalWsUrl = backendUrl.startsWith('ws://') || backendUrl.startsWith('wss://')
+      ? backendUrl
+      : `${defaultWsUrl}${backendUrl}`;
+
+    console.log(`Connecting to WebSocket at: ${finalWsUrl}`);
+    const ws = new WebSocket(finalWsUrl);
     wsRef.current = ws;
 
     ws.onmessage = async (event) => {
@@ -94,12 +103,22 @@ const Chat = () => {
     }
 
     ws.onopen = () => {
+      console.log("WebSocket connected successfully");
       ws.send(JSON.stringify({
         type: "join",
         payload: { roomId: code, name: name }
       }));
       setLoading(false);
-    }
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket connection error:", error);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed");
+    };
+
 
     return () => {
       ws.close();
