@@ -1,6 +1,6 @@
 
 
-import { ChatIcon, Users, Info, Smiley, Clock, PaperPlaneRight } from '@phosphor-icons/react'
+import { Users, Info, Smiley, Clock, PaperPlaneRight } from '@phosphor-icons/react'
 import React, { useState, useRef, useEffect } from 'react'
 import { userNameStore } from '../store'
 import { useUserCodeStore } from '../store'
@@ -170,8 +170,10 @@ const Chat = () => {
       <div className='font-Josefin glass-chat animate-fade-in-up shadow-2xl flex-1 max-w-[500px] h-full overflow-hidden rounded-2xl text-white flex flex-col relative'>
         <div className='text-3xl tracking-tighter p-6 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col bg-white/5'>
           <div className='flex items-center justify-between w-full'>
-            <div className='flex items-center gap-x-3'><ChatIcon weight="fill" className='text-zinc-400' />
-              Chatty</div>
+            <div className='flex items-center gap-x-3'>
+              <img src="/favicon.png" alt="Chatty Logo" className="w-8 h-8 rounded-lg shadow-lg border border-white/10" />
+              Chatty
+            </div>
             <div className='flex gap-x-2'>
               <div className='flex items-center gap-x-2 bg-zinc-900/50 px-3 py-1.5 rounded-lg border border-white/5'>
                 <Clock size={14} className='text-zinc-500' />

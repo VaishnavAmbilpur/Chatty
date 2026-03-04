@@ -1,4 +1,4 @@
-import { ChatIcon } from '@phosphor-icons/react'
+
 import "../App.css"
 import "../index.css"
 import { CopyIcon } from '@phosphor-icons/react'
@@ -47,8 +47,10 @@ const Hero = () => {
   return (
     <div className='font-Josefin glass animate-fade-in-up shadow-2xl my-auto min-w-[350px] md:min-w-[400px] rounded-2xl text-white overflow-hidden'>
       <div className='text-3xl tracking-tighter p-6 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col bg-white/5'>
-        <div className='flex items-center gap-x-3'><ChatIcon weight="fill" className='text-zinc-400' />
-          Chatty</div>
+        <div className='flex items-center gap-x-3'>
+          <img src="/favicon.png" alt="Chatty Logo" className="w-8 h-8 rounded-lg shadow-lg border border-white/10" />
+          Chatty
+        </div>
         <div className='text-xs text-zinc-500 tracking-wider uppercase font-bold mt-1'>Temporary Chat Room</div>
       </div>
 
