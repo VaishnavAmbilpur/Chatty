@@ -1,6 +1,22 @@
 import { WebSocketServer, WebSocket } from "ws";
+import http from "http";
 
-const wss = new WebSocketServer({ port: 8080 });
+const server = http.createServer((req, res) => {
+    if (req.url === "/health") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("OK");
+    } else {
+        res.writeHead(404);
+        res.end();
+    }
+});
+
+const wss = new WebSocketServer({ server });
+const port = process.env.PORT || 8080;
+
+server.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+});
 
 interface User {
     socket: WebSocket;
