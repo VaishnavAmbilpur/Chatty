@@ -47,8 +47,7 @@ export async function encryptMessage(message: string, roomCode: string): Promise
 export async function decryptMessage(encryptedData: string, roomCode: string): Promise<string> {
     try {
         const [ivBase64, encryptedBase64] = encryptedData.split(":");
-        if (!ivBase64 || !encryptedBase64) return encryptedData;
-        bitumen
+        if (!ivBase64 || !encryptedBase64) return encryptedData
 
         const iv = new Uint8Array(atob(ivBase64).split("").map(c => c.charCodeAt(0)));
         const encrypted = new Uint8Array(atob(encryptedBase64).split("").map(c => c.charCodeAt(0)));
