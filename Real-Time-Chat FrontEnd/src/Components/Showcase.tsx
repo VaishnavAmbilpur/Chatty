@@ -41,10 +41,8 @@ const Showcase = () => {
 
     return (
         <div className="min-h-screen w-full bg-zinc-950 text-zinc-200 selection:bg-white selection:text-zinc-950 overflow-x-hidden relative">
-            {/* Noise Texture */}
             <div className="fixed inset-0 noise z-50 pointer-events-none"></div>
 
-            {/* Dynamic Background Blobs */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
                 <div
                     className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-white/5 rounded-full blur-[140px] animate-orbit opacity-60"
@@ -56,7 +54,6 @@ const Showcase = () => {
                 ></div>
             </div>
 
-            {/* Navigation */}
             <nav className="relative z-10 flex justify-between items-center px-6 py-8 md:px-12 max-w-7xl mx-auto backdrop-blur-sm border-b border-white/5 bg-zinc-950/20 sticky top-0">
                 <div className="flex items-center gap-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     <img src="/favicon.png" alt="Chatty Logo" className="w-8 h-8 rounded-lg shadow-lg border border-white/10 group-hover:scale-110 transition-transform" />
@@ -72,7 +69,6 @@ const Showcase = () => {
                 </div>
             </nav>
 
-            {/* Hero Section */}
             <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 md:px-12 text-center md:text-left grid lg:grid-cols-2 gap-16 items-center">
                 <div className="animate-fade-in-up">
                     <div className="inline-flex items-center gap-x-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full mb-8 hover:border-white/20 transition-colors cursor-default">
@@ -103,7 +99,6 @@ const Showcase = () => {
 
                 <div className="relative animate-scale-in hidden lg:block">
                     <div className="relative z-10 glass-chat p-10 rounded-[40px] border border-white/10 shadow-[0_0_50px_rgba(255,255,255,0.03)] animate-float overflow-hidden">
-                        {/* Simple UI Mockup */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-x-3">
@@ -145,13 +140,11 @@ const Showcase = () => {
                             </div>
                         </div>
                     </div>
-                    {/* Decorative Background for Image */}
                     <div className="absolute -top-20 -right-20 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] -z-10"></div>
                     <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-white/5 rounded-full blur-[80px] -z-10"></div>
                 </div>
             </main>
 
-            {/* Features Section */}
             <section className="relative z-10 max-w-7xl mx-auto px-6 py-40 md:px-12">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
                     <div className="max-w-2xl animate-fade-in-up">
@@ -180,8 +173,6 @@ const Showcase = () => {
                     ))}
                 </div>
             </section>
-
-            {/* CTA Section */}
             <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 pb-40 md:px-12">
                 <div className="glass p-12 md:p-24 rounded-[48px] text-center relative overflow-hidden border border-white/10">
                     <div className="absolute top-0 left-0 w-full h-full bg-white/5 noise -z-10"></div>
@@ -198,7 +189,6 @@ const Showcase = () => {
                 </div>
             </section>
 
-            {/* Footer */}
             <footer className="relative z-10 border-t border-white/5 py-16 px-6 md:px-12 bg-zinc-950">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
                     <div className="space-y-6">
@@ -245,7 +235,7 @@ const Showcase = () => {
                     </div>
                 </div>
             </footer>
-        </div>
+        </div >
     )
 }
 

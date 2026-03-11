@@ -26,7 +26,7 @@ const Chat = () => {
   const navigate = useNavigate();
 
   const [showEmojis, setShowEmojis] = useState(false)
-  const [timeLeft, setTimeLeft] = useState(3600); // 60 minutes
+  const [timeLeft, setTimeLeft] = useState(3600);
 
   const mesRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -54,7 +54,6 @@ const Chat = () => {
     const defaultWsUrl = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
     const backendUrl = import.meta.env.VITE_WS_URL || 'localhost:8080';
 
-    // Ensure the URL has the correct protocol prefix if it's just a hostname/port
     const finalWsUrl = backendUrl.startsWith('ws://') || backendUrl.startsWith('wss://')
       ? backendUrl
       : `${defaultWsUrl}${backendUrl}`;
@@ -94,7 +93,6 @@ const Chat = () => {
           }
         }
       } catch (e) {
-        // Fallback for old simple messages during transition
         setMessages(m => [...m, {
           sender: "System",
           message: event.data,
@@ -191,11 +189,10 @@ const Chat = () => {
 
 
   return (
-    <div className='flex gap-x-4 max-w-5xl w-full h-[600px] items-center justify-center'>
+    <div className='flex flex-col md:flex-row gap-4 md:gap-x-4 max-w-5xl w-full h-auto md:h-[600px] items-center justify-center p-4 md:p-0'>
       <audio ref={audioRef} src="https://assets.mixkit.co/active_storage/sfx/2354/2354-preview.mp3" />
 
-      {/* Main Chat Area */}
-      <div className='font-Josefin glass-chat animate-fade-in-up shadow-2xl flex-1 max-w-[500px] h-full overflow-hidden rounded-2xl text-white flex flex-col relative'>
+      <div className='font-Josefin glass-chat animate-fade-in-up shadow-2xl flex-1 w-full max-w-[500px] h-[600px] md:h-full overflow-hidden rounded-2xl text-white flex flex-col relative'>
         <div className='text-3xl tracking-tighter p-6 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col bg-white/5'>
           <div className='flex items-center justify-between w-full'>
             <div className='flex items-center gap-x-3'>
@@ -325,9 +322,8 @@ const Chat = () => {
         </div>
       </div>
 
-      {/* Side Panel for Users */}
       {showUsers && (
-        <div className='w-64 glass-chat h-full rounded-2xl p-6 flex flex-col animate-scale-in'>
+        <div className='w-full md:w-64 glass-chat h-auto md:h-full rounded-2xl p-6 flex flex-col animate-scale-in'>
           <div className='flex items-center gap-x-2 mb-6 text-zinc-400 font-bold uppercase text-xs tracking-widest'>
             <Users size={16} />
             Participants ({roomUsers.length})

@@ -3,7 +3,6 @@ import http from "http";
 import fs from "fs";
 import path from "path";
 
-// Manual .env parsing to avoid dependency overhead/issues
 try {
     const envPath = path.resolve(__dirname, "../.env");
     if (fs.existsSync(envPath)) {
@@ -38,7 +37,7 @@ server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
 
-// Self-ping mechanism to keep the server awake on Render
+
 const url = process.env.URL || `http://localhost:${port}`;
 setInterval(() => {
     http.get(`${url}/health`, (res) => {
@@ -46,7 +45,7 @@ setInterval(() => {
     }).on("error", (err) => {
         console.error("Self-ping error:", err.message);
     });
-}, 14 * 60 * 1000); // Ping every 14 minutes
+}, 14 * 60 * 1000);
 
 interface User {
     socket: WebSocket;
@@ -91,14 +90,12 @@ wss.on("connection", (socket) => {
                     isAdmin: isFirstInRoom,
                 });
 
-                // Send history to the joined user
                 const history = roomHistory.get(roomId) || [];
                 socket.send(JSON.stringify({
                     type: "history",
                     payload: { messages: history }
                 }));
 
-                // Notify room about new user
                 broadcastToRoom(roomId, {
                     type: "presence",
                     payload: {
@@ -121,7 +118,6 @@ wss.on("connection", (socket) => {
                         isAdmin: currentUser.isAdmin,
                     };
 
-                    // Update room history
                     const history = roomHistory.get(currentUser.room) || [];
                     history.push(chatPayload);
                     if (history.length > 50) history.shift();
@@ -157,7 +153,6 @@ wss.on("connection", (socket) => {
             const { room, name } = allSockets[userIndex];
             allSockets.splice(userIndex, 1);
 
-            // Notify room about departure
             broadcastToRoom(room, {
                 type: "presence",
                 payload: {

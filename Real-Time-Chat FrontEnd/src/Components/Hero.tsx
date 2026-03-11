@@ -9,11 +9,10 @@ import { useRef, useState } from 'react'
 
 import { userNameStore, useUserCodeStore } from '../store'
 const Hero = () => {
-  //@ts-ignore
   const navigate = useNavigate();
   const nameRef = useRef<HTMLInputElement>(null);
   const codeRef = useRef<HTMLInputElement>(null);
-  const [alert, setalert] = useState(null);
+  const [alert, setalert] = useState<string | null>(null);
   const code = userNameStore((state) => state.user);
   const setcode = userNameStore((state) => state.setuser);
 
@@ -26,7 +25,6 @@ const Hero = () => {
     }
     let ans = st.toString();
     console.log(ans);
-    //@ts-ignore
     setalert("D");
     setcode(st);
   }
@@ -36,8 +34,7 @@ const Hero = () => {
   }
   function handleJoin(): void {
     if (nameRef.current?.value !== '' && codeRef.current?.value !== '') {
-      // @ts-ignore
-      setcode(codeRef.current?.value)
+      setcode(codeRef.current?.value || "")
       if (nameRef.current?.value)
         setname(nameRef.current?.value);
       navigate("/chat");

@@ -1,7 +1,7 @@
 
 
 const ITERATIONS = 100000;
-const SALT = new TextEncoder().encode("chatty-e2ee-salt"); // Static salt for simplicity in this demo
+const SALT = new TextEncoder().encode("chatty-e2ee-salt");
 
 async function getKey(roomCode: string): Promise<CryptoKey> {
     const enc = new TextEncoder();
@@ -38,7 +38,6 @@ export async function encryptMessage(message: string, roomCode: string): Promise
         enc.encode(message)
     );
 
-    // Combine IV and Ciphertext into a single string for transport
     const ivBase64 = btoa(String.fromCharCode(...iv));
     const encryptedBase64 = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
 
@@ -48,7 +47,8 @@ export async function encryptMessage(message: string, roomCode: string): Promise
 export async function decryptMessage(encryptedData: string, roomCode: string): Promise<string> {
     try {
         const [ivBase64, encryptedBase64] = encryptedData.split(":");
-        if (!ivBase64 || !encryptedBase64) return encryptedData; // Fallback for plain text
+        if (!ivBase64 || !encryptedBase64) return encryptedData;
+        bitumen
 
         const iv = new Uint8Array(atob(ivBase64).split("").map(c => c.charCodeAt(0)));
         const encrypted = new Uint8Array(atob(encryptedBase64).split("").map(c => c.charCodeAt(0)));
