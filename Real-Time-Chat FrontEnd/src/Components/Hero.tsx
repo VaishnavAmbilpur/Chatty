@@ -23,24 +23,34 @@ const Hero = () => {
     while (st.length < 6) {
       st += letters[Math.floor(Math.random() * 26)];
     }
-    let ans = st.toString();
-    console.log(ans);
-    setalert("D");
     setcode(st);
+    if (codeRef.current) {
+      codeRef.current.value = st;
+    }
+    setalert("D");
   }
   function handle(): void {
     navigator.clipboard.writeText(code);
     toast.success("Copied to Clipboard");
   }
   function handleJoin(): void {
-    if (nameRef.current?.value !== '' && codeRef.current?.value !== '') {
-      setcode(codeRef.current?.value || "")
-      if (nameRef.current?.value)
-        setname(nameRef.current?.value);
-      navigate("/chat");
+    const name = nameRef.current?.value.trim();
+    const roomCode = codeRef.current?.value.trim();
+
+    if (!name) {
+      toast.error("Please enter your name");
+      return;
+    }
+    if (!roomCode) {
+      toast.error("Please enter a room code");
+      return;
     }
 
+    setcode(roomCode);
+    setname(name);
+    navigate("/chat");
   }
+
   return (
     <div className='font-Josefin glass animate-fade-in-up shadow-2xl my-auto min-w-[350px] md:min-w-[400px] rounded-2xl text-white overflow-hidden'>
       <div className='text-3xl tracking-tighter p-6 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col bg-white/5'>
@@ -69,14 +79,12 @@ const Hero = () => {
               className='rounded-xl focus:ring-2 focus:ring-white/20 outline-none transition-all placeholder-zinc-500 flex-1 p-4 bg-zinc-900/50 border border-zinc-700/50 focus:border-white/40'
               ref={codeRef}
             />
-            <Link to="/chat" className='flex-1'>
-              <button
-                className='w-full h-full items-center font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-xl p-4 text-zinc-950 font-bold flex justify-center bg-white shadow-lg'
-                onClick={() => { handleJoin() }}
-              >
-                Join Room
-              </button>
-            </Link>
+            <button
+              className='flex-1 items-center font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-xl p-4 text-zinc-950 font-bold flex justify-center bg-white shadow-lg'
+              onClick={() => { handleJoin() }}
+            >
+              Join Room
+            </button>
           </div>
         </div>
 

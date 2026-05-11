@@ -1,13 +1,14 @@
-
 import './App.css'
 import Chat from './Components/Chat'
 import Hero from './Components/Hero'
 import Showcase from './Components/Showcase'
 import { BrowserRouter, Route, Routes } from 'react-router'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <BrowserRouter>
         <Routes>
           <Route

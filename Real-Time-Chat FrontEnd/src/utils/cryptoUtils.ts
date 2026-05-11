@@ -1,7 +1,7 @@
 
 
 const ITERATIONS = 100000;
-const SALT = new TextEncoder().encode("chatty-e2ee-salt");
+
 
 async function getKey(roomCode: string): Promise<CryptoKey> {
     const enc = new TextEncoder();
@@ -16,7 +16,7 @@ async function getKey(roomCode: string): Promise<CryptoKey> {
     return window.crypto.subtle.deriveKey(
         {
             name: "PBKDF2",
-            salt: SALT,
+            salt: enc.encode(roomCode),
             iterations: ITERATIONS,
             hash: "SHA-256",
         },
