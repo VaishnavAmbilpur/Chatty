@@ -61,15 +61,17 @@ interface ChatMessage {
     isAdmin: boolean;
 }
 
-let allSockets: User[] = [];
+const rooms = new Map<string, User[]>();
+const socketToUser = new Map<WebSocket, User>();
 const roomHistory = new Map<string, ChatMessage[]>();
 
 function broadcastToRoom(roomId: string, message: any) {
-    allSockets.forEach((user) => {
-        if (user.room === roomId) {
+    const users = rooms.get(roomId);
+    if (users) {
+        users.forEach((user) => {
             user.socket.send(JSON.stringify(message));
-        }
-    });
+        });
+    }
 }
 
 wss.on("connection", (socket) => {
@@ -81,14 +83,20 @@ wss.on("connection", (socket) => {
 
             if (parsedMessage.type === "join") {
                 const { roomId, name } = parsedMessage.payload;
-                const isFirstInRoom = !allSockets.some((u) => u.room === roomId);
+                
+                let users = rooms.get(roomId) || [];
+                const isFirstInRoom = users.length === 0;
 
-                allSockets.push({
+                const newUser: User = {
                     socket,
                     room: roomId,
                     name: name || "Anonymous",
                     isAdmin: isFirstInRoom,
-                });
+                };
+
+                users.push(newUser);
+                rooms.set(roomId, users);
+                socketToUser.set(socket, newUser);
 
                 const history = roomHistory.get(roomId) || [];
                 socket.send(JSON.stringify({
@@ -99,9 +107,7 @@ wss.on("connection", (socket) => {
                 broadcastToRoom(roomId, {
                     type: "presence",
                     payload: {
-                        users: allSockets
-                            .filter((u) => u.room === roomId)
-                            .map((u) => ({ name: u.name, isAdmin: u.isAdmin })),
+                        users: users.map((u) => ({ name: u.name, isAdmin: u.isAdmin })),
                     },
                 });
 
@@ -109,7 +115,7 @@ wss.on("connection", (socket) => {
             }
 
             if (parsedMessage.type === "chat") {
-                const currentUser = allSockets.find((u) => u.socket === socket);
+                const currentUser = socketToUser.get(socket);
                 if (currentUser) {
                     const chatPayload: ChatMessage = {
                         message: parsedMessage.payload.message,
@@ -131,7 +137,7 @@ wss.on("connection", (socket) => {
             }
 
             if (parsedMessage.type === "typing") {
-                const currentUser = allSockets.find((u) => u.socket === socket);
+                const currentUser = socketToUser.get(socket);
                 if (currentUser) {
                     broadcastToRoom(currentUser.room, {
                         type: "typing",
@@ -148,19 +154,25 @@ wss.on("connection", (socket) => {
     });
 
     socket.on("close", () => {
-        const userIndex = allSockets.findIndex((u) => u.socket === socket);
-        if (userIndex !== -1) {
-            const { room, name } = allSockets[userIndex];
-            allSockets.splice(userIndex, 1);
+        const currentUser = socketToUser.get(socket);
+        if (currentUser) {
+            const { room, name } = currentUser;
+            socketToUser.delete(socket);
 
-            broadcastToRoom(room, {
-                type: "presence",
-                payload: {
-                    users: allSockets
-                        .filter((u) => u.room === room)
-                        .map((u) => ({ name: u.name, isAdmin: u.isAdmin })),
-                },
-            });
+            let users = rooms.get(room) || [];
+            users = users.filter((u) => u.socket !== socket);
+            
+            if (users.length === 0) {
+                rooms.delete(room);
+            } else {
+                rooms.set(room, users);
+                broadcastToRoom(room, {
+                    type: "presence",
+                    payload: {
+                        users: users.map((u) => ({ name: u.name, isAdmin: u.isAdmin })),
+                    },
+                });
+            }
             console.log(`User ${name} left room ${room}`);
         }
     });
