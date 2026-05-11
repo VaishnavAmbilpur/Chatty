@@ -41,7 +41,7 @@ const Hero = () => {
       return;
     }
     if (!roomCode) {
-      toast.error("Please enter a room code");
+      toast.error("Please enter Room Code");
       return;
     }
 

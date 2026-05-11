@@ -8,7 +8,34 @@ import { Toaster } from 'react-hot-toast'
 function App() {
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster 
+        position="top-center" 
+        reverseOrder={false} 
+        toastOptions={{
+          style: {
+            background: '#18181b',
+            color: '#fff',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '1rem',
+            padding: '12px 20px',
+            fontSize: '14px',
+            fontWeight: '500',
+            fontFamily: 'Josefin Sans, sans-serif'
+          },
+          success: {
+            iconTheme: {
+              primary: '#fff',
+              secondary: '#18181b',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <BrowserRouter>
         <Routes>
           <Route
