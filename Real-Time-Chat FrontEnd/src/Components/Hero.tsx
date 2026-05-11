@@ -2,7 +2,6 @@
 import "../App.css"
 import "../index.css"
 import { CopyIcon } from '@phosphor-icons/react'
-import { Link } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useRef, useState } from 'react'

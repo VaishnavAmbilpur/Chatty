@@ -74,5 +74,26 @@ npm run dev
 
 ---
 
+## 🚀 Deployment
+
+### 1. Backend (Render)
+- **Environment**: Node
+- **Build Command**: `npm install && npm run build`
+- **Start Command**: `npm start`
+- **Environment Variables**:
+  - `PORT`: 8080 (Render usually provides this)
+  - `URL`: Your Render app URL (e.g., `https://chatty-backend.onrender.com`) - *Used for self-ping to prevent sleeping.*
+
+### 2. Frontend (Vercel)
+- **Framework Preset**: Vite
+- **Root Directory**: `Real-Time-Chat FrontEnd`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**:
+  - `VITE_WS_URL`: Your Render backend URL (e.g., `chatty-backend.onrender.com`) - *Do not include ws:// or wss://, the app handles it.*
+
+---
+
 ## 🛡️ Security Note
 All encryption keys are local to the browser. Your messages are never stored in plain text anywhere in the infrastructure.
+
