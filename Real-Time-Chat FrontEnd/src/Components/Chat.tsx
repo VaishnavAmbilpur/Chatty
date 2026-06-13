@@ -1,10 +1,8 @@
 
-
 import { Users, Info, Smiley, Clock, PaperPlaneRight, SignOut } from '@phosphor-icons/react'
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { userNameStore } from '../store'
-import { useUserCodeStore } from '../store'
+import { userNameStore, useUserCodeStore } from '../store'
 import ReactMarkdown from 'react-markdown'
 import { encryptMessage, decryptMessage } from '../utils/cryptoUtils'
 

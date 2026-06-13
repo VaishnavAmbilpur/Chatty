@@ -8,9 +8,9 @@ import { Toaster } from 'react-hot-toast'
 function App() {
   return (
     <>
-      <Toaster 
-        position="top-center" 
-        reverseOrder={false} 
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
         toastOptions={{
           style: {
             background: '#18181b',
