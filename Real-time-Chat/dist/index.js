@@ -129,7 +129,7 @@ wss.on("connection", (socket) => {
     socket.on("close", () => {
         const currentUser = socketToUser.get(socket);
         if (currentUser) {
-            const { room, name } = currentUser;
+            const { room, name, isAdmin } = currentUser;
             socketToUser.delete(socket);
             let users = rooms.get(room) || [];
             users = users.filter((u) => u.socket !== socket);
@@ -137,6 +137,9 @@ wss.on("connection", (socket) => {
                 rooms.delete(room);
             }
             else {
+                if (isAdmin && users.length > 0) {
+                    users[0].isAdmin = true;
+                }
                 rooms.set(room, users);
                 broadcastToRoom(room, {
                     type: "presence",

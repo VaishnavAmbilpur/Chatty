@@ -49,10 +49,6 @@ const Showcase = () => {
                 <div className="flex items-center gap-x-2 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                     <img src="/favicon.png" alt="Chatty Logo" className="w-7 h-7 rounded-md shadow-md border border-zinc-850 group-hover:scale-110 transition-transform" />
                     <span className="text-lg font-bold tracking-tighter text-white font-geist-sans">chatty</span>
-                    <span className="flex h-1.5 w-1.5 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
                 </div>
                 <div className="flex items-center gap-x-5">
                     <a href={githubUrl} target="_blank" rel="noreferrer" className="text-zinc-500 hover:text-white transition-colors">
@@ -67,11 +63,6 @@ const Showcase = () => {
             {/* Centered Hero Section */}
             <main className="relative z-10 max-w-3xl mx-auto px-6 pt-24 pb-20 text-center flex flex-col items-center justify-center w-full">
                 <div className="animate-fade-in-up space-y-6">
-                    <div className="inline-flex items-center gap-x-2 border border-zinc-900 bg-zinc-950 px-4 py-1.5 rounded-full text-[10px] text-zinc-500 font-geist-mono">
-                        <span>// active_protocol</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>zero_retention</span>
-                    </div>
                     <div className="space-y-4">
                         <h1 className="text-5xl md:text-6xl font-extrabold tracking-tighter text-white leading-tight">
                             Privacy as a <span className="text-gradient">Standard.</span>

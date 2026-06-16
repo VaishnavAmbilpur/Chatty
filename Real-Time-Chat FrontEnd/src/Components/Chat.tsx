@@ -48,77 +48,95 @@ const Chat = () => {
       ? backendUrl
       : `${defaultWsUrl}${backendUrl}`;
 
-    console.log(`Connecting to WebSocket at: ${finalWsUrl}`);
-    const ws = new WebSocket(finalWsUrl);
-    wsRef.current = ws;
+    let socket: WebSocket | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+    let isComponentMounted = true;
 
-    ws.onmessage = async (event) => {
-      try {
-        const data = JSON.parse(event.data);
+    const connect = () => {
+      console.log(`Connecting to WebSocket at: ${finalWsUrl}`);
+      socket = new WebSocket(finalWsUrl);
+      wsRef.current = socket;
 
-        if (data.type === "chat") {
-          const decrypted = await decryptMessage(data.payload.message, code);
+      socket.onmessage = async (event) => {
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.type === "chat") {
+            const decrypted = await decryptMessage(data.payload.message, code);
+            setMessages(m => {
+              const next = [...m, { ...data.payload, message: decrypted }];
+              return next.length > 50 ? next.slice(next.length - 50) : next;
+            });
+            if (data.payload.sender !== name) {
+              audioRef.current?.play().catch(() => { });
+            }
+          } else if (data.type === "history") {
+            const decryptedMessages = await Promise.all(
+              data.payload.messages.map(async (msg: any) => ({
+                ...msg,
+                message: await decryptMessage(msg.message, code)
+              }))
+            );
+            setMessages(decryptedMessages.length > 50 ? decryptedMessages.slice(decryptedMessages.length - 50) : decryptedMessages);
+          } else if (data.type === "presence") {
+            setRoomUsers(data.payload.users);
+          } else if (data.type === "typing") {
+            const { name: typingName, isTyping } = data.payload;
+            if (typingName !== name) {
+              setTypingUsers(prev => isTyping
+                ? Array.from(new Set([...prev, typingName]))
+                : prev.filter(n => n !== typingName)
+              );
+            }
+          }
+        } catch (e) {
           setMessages(m => {
-            const next = [...m, { ...data.payload, message: decrypted }];
+            const next = [...m, {
+              sender: "System",
+              message: event.data,
+              timestamp: new Date().toISOString(),
+              isAdmin: false
+            }];
             return next.length > 50 ? next.slice(next.length - 50) : next;
           });
-          if (data.payload.sender !== name) {
-            audioRef.current?.play().catch(() => { });
-          }
-        } else if (data.type === "history") {
-          const decryptedMessages = await Promise.all(
-            data.payload.messages.map(async (msg: any) => ({
-              ...msg,
-              message: await decryptMessage(msg.message, code)
-            }))
-          );
-          setMessages(decryptedMessages.length > 50 ? decryptedMessages.slice(decryptedMessages.length - 50) : decryptedMessages);
-        } else if (data.type === "presence") {
-
-          setRoomUsers(data.payload.users);
-        } else if (data.type === "typing") {
-          const { name: typingName, isTyping } = data.payload;
-          if (typingName !== name) {
-            setTypingUsers(prev => isTyping
-              ? Array.from(new Set([...prev, typingName]))
-              : prev.filter(n => n !== typingName)
-            );
-          }
         }
-      } catch (e) {
-        setMessages(m => {
-          const next = [...m, {
-            sender: "System",
-            message: event.data,
-            timestamp: new Date().toISOString(),
-            isAdmin: false
-          }];
-          return next.length > 50 ? next.slice(next.length - 50) : next;
-        });
-      }
-    }
+      };
 
-    ws.onopen = () => {
-      console.log("WebSocket connected successfully");
-      ws.send(JSON.stringify({
-        type: "join",
-        payload: { roomId: code, name: name }
-      }));
-      setLoading(false);
+      socket.onopen = () => {
+        console.log("WebSocket connected successfully");
+        socket?.send(JSON.stringify({
+          type: "join",
+          payload: { roomId: code, name: name }
+        }));
+        setLoading(false);
+      };
+
+      socket.onerror = (error) => {
+        console.error("WebSocket connection error:", error);
+      };
+
+      socket.onclose = () => {
+        console.log("WebSocket connection closed");
+        if (isComponentMounted) {
+          reconnectTimeout = setTimeout(() => {
+            console.log("Attempting to reconnect...");
+            connect();
+          }, 3000);
+        }
+      };
     };
 
-    ws.onerror = (error) => {
-      console.error("WebSocket connection error:", error);
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
+    connect();
 
     return () => {
-      ws.close();
-    }
+      isComponentMounted = false;
+      if (socket) {
+        socket.close();
+      }
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+      }
+    };
   }, [code, name, setRoomUsers, setTypingUsers]);
 
   useEffect(() => {
