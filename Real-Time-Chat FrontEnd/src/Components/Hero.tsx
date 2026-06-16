@@ -51,35 +51,35 @@ const Hero = () => {
   }
 
   return (
-    <div className='font-Josefin glass animate-fade-in-up shadow-2xl my-auto min-w-[350px] md:min-w-[400px] rounded-2xl text-white overflow-hidden'>
-      <div className='text-3xl tracking-tighter p-6 font-semibold flex items-start flex-wrap gap-x-4 gap-y-2 flex-col bg-white/5'>
-        <div className='flex items-center gap-x-3'>
-          <img src="/favicon.png" alt="Chatty Logo" className="w-8 h-8 rounded-lg shadow-lg border border-white/10" />
+    <div className='font-Josefin glass animate-fade-in-up shadow-2xl my-auto min-w-[320px] md:min-w-[360px] rounded-xl text-white overflow-hidden'>
+      <div className='text-2xl tracking-tighter p-5 font-semibold flex items-start flex-wrap gap-x-3 gap-y-1.5 flex-col bg-white/5'>
+        <div className='flex items-center gap-x-2.5'>
+          <img src="/favicon.png" alt="Chatty Logo" className="w-7 h-7 rounded-lg shadow-md border border-white/10" />
           Chatty
         </div>
-        <div className='text-xs text-zinc-500 tracking-wider uppercase font-bold mt-1'>Temporary Chat Room</div>
+        <div className='text-[10px] text-zinc-500 tracking-wider uppercase font-bold mt-0.5'>Temporary Chat Room</div>
       </div>
 
-      <div className='p-6 flex flex-col gap-y-4'>
-        <div className='font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-xl p-4 text-zinc-950 font-bold flex cursor-pointer justify-center bg-white shadow-lg' onClick={() => { random() }}>
+      <div className='p-5 flex flex-col gap-y-3.5'>
+        <div className='font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-lg py-2.5 px-4 text-zinc-950 font-bold flex cursor-pointer justify-center bg-white shadow-md text-sm' onClick={() => { random() }}>
           Create New Room
         </div>
 
-        <div className='flex flex-col gap-y-3'>
+        <div className='flex flex-col gap-y-2.5'>
           <input
             placeholder='Enter your name'
-            className='rounded-xl focus:ring-2 focus:ring-white/20 outline-none transition-all placeholder-zinc-500 w-full p-4 bg-zinc-900/50 border border-zinc-700/50 focus:border-white/40'
+            className='rounded-lg focus:ring-2 focus:ring-white/20 outline-none transition-all placeholder-zinc-500 w-full py-2.5 px-4 bg-zinc-900/50 border border-zinc-700/50 focus:border-white/40 text-sm'
             ref={nameRef}
           />
 
           <div className='flex flex-row gap-x-2'>
             <input
               placeholder='Room code'
-              className='rounded-xl focus:ring-2 focus:ring-white/20 outline-none transition-all placeholder-zinc-500 flex-1 p-4 bg-zinc-900/50 border border-zinc-700/50 focus:border-white/40'
+              className='rounded-lg focus:ring-2 focus:ring-white/20 outline-none transition-all placeholder-zinc-500 flex-1 py-2.5 px-4 bg-zinc-900/50 border border-zinc-700/50 focus:border-white/40 text-sm'
               ref={codeRef}
             />
             <button
-              className='flex-1 items-center font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-xl p-4 text-zinc-950 font-bold flex justify-center bg-white shadow-lg'
+              className='flex-1 items-center font-Josefin hover:bg-zinc-200 transition-all duration-300 active:scale-[0.98] rounded-lg py-2.5 px-4 text-zinc-950 font-bold flex justify-center bg-white shadow-md text-sm'
               onClick={() => { handleJoin() }}
             >
               Join Room
@@ -89,13 +89,13 @@ const Hero = () => {
 
         {alert && (
           <div className='animate-scale-in'>
-            <div className='bg-zinc-900/80 border border-zinc-800 rounded-xl p-4 flex justify-between items-center group'>
+            <div className='bg-zinc-900/80 border border-zinc-800 rounded-lg py-2.5 px-4 flex justify-between items-center group'>
               <div className='flex flex-col'>
                 <span className='text-[10px] uppercase text-zinc-500 font-bold'>Room Code</span>
-                <div className='text-white text-xl font-mono tracking-widest'>{code}</div>
+                <div className='text-white text-lg font-mono tracking-widest'>{code}</div>
               </div>
-              <div className='p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer' onClick={() => { handle() }}>
-                <CopyIcon size={24} className='text-zinc-400 group-hover:text-white transition-colors' />
+              <div className='p-1.5 hover:bg-white/10 rounded-lg transition-colors cursor-pointer' onClick={() => { handle() }}>
+                <CopyIcon size={20} className='text-zinc-400 group-hover:text-white transition-colors' />
               </div>
             </div>
           </div>
