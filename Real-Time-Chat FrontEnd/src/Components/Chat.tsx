@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { userNameStore, useUserCodeStore } from '../store'
 import ReactMarkdown from 'react-markdown'
-import { encryptMessage, decryptMessage } from '../utils/cryptoUtils'
 
 
 interface Message {
@@ -62,21 +61,15 @@ const Chat = () => {
           const data = JSON.parse(event.data);
 
           if (data.type === "chat") {
-            const decrypted = await decryptMessage(data.payload.message, code);
             setMessages(m => {
-              const next = [...m, { ...data.payload, message: decrypted }];
+              const next = [...m, data.payload];
               return next.length > 50 ? next.slice(next.length - 50) : next;
             });
             if (data.payload.sender !== name) {
               audioRef.current?.play().catch(() => { });
             }
           } else if (data.type === "history") {
-            const decryptedMessages = await Promise.all(
-              data.payload.messages.map(async (msg: any) => ({
-                ...msg,
-                message: await decryptMessage(msg.message, code)
-              }))
-            );
+            const decryptedMessages = data.payload.messages;
             setMessages(decryptedMessages.length > 50 ? decryptedMessages.slice(decryptedMessages.length - 50) : decryptedMessages);
           } else if (data.type === "presence") {
             setRoomUsers(data.payload.users);
@@ -155,20 +148,15 @@ const Chat = () => {
   async function sendMessage() {
     const message = inputRef.current?.value;
     if (message && wsRef.current) {
-      try {
-        const encrypted = await encryptMessage(message, code);
-        wsRef.current.send(JSON.stringify({
-          type: "chat",
-          payload: { message: encrypted }
-        }));
-        wsRef.current.send(JSON.stringify({
-          type: "typing",
-          payload: { isTyping: false }
-        }));
-        if (inputRef.current) inputRef.current.value = '';
-      } catch (error) {
-        console.error("Failed to encrypt message:", error);
-      }
+      wsRef.current.send(JSON.stringify({
+        type: "chat",
+        payload: { message: message }
+      }));
+      wsRef.current.send(JSON.stringify({
+        type: "typing",
+        payload: { isTyping: false }
+      }));
+      if (inputRef.current) inputRef.current.value = '';
     }
   }
 
@@ -229,7 +217,7 @@ const Chat = () => {
           <span className='text-xs text-zinc-400 font-medium'>Room Code: <span className='text-white font-mono'>{code}</span></span>
           <div className='flex items-center gap-x-1.5'>
             <div className='w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse'></div>
-            <span className='text-[9px] text-zinc-500 uppercase font-bold text-green-500'>E2EE Protected</span>
+            <span className='text-[9px] text-zinc-500 uppercase font-bold text-green-500'>Connected</span>
           </div>
         </div>
 
@@ -240,7 +228,7 @@ const Chat = () => {
                 <div className="w-12 h-12 rounded-full border-t-2 border-white animate-spin"></div>
                 <div className="absolute inset-0 w-12 h-12 rounded-full border-2 border-white/10"></div>
               </div>
-              <span className="mt-4 text-xs text-zinc-400 font-medium animate-pulse-slow">Initiating E2EE Protocol...</span>
+              <span className="mt-4 text-xs text-zinc-400 font-medium animate-pulse-slow">Connecting...</span>
             </div>
           ) : (
             <div ref={mesRef} className='flex-1 flex flex-col gap-y-3 overflow-y-auto scrollbar-hide pr-2'>
@@ -353,8 +341,7 @@ const Chat = () => {
               <span className='text-[9px] font-bold uppercase'>Security Info</span>
             </div>
             <p className='text-[9px] text-zinc-600 leading-relaxed font-medium'>
-              • Messages are End-to-End Encrypted using your Room Code. No one, not even the server, can read them.<br />
-              • Recent chat history (last 50 messages) is securely stored and available when you join.
+              • Recent chat history (last 50 messages) is securely stored in memory and available when you join.
             </p>
           </div>
         </div>

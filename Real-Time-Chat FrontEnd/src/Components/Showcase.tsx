@@ -16,8 +16,8 @@ const Showcase = () => {
     const features = [
         {
             icon: <LockKey size={24} weight="duotone" className="text-white" />,
-            title: "End-to-End Encryption",
-            description: "Your messages are encrypted using your room code. Not even our servers can read your conversations."
+            title: "Secure Rooms",
+            description: "Join temporary rooms with your friends and chat seamlessly in real-time."
         },
         {
             icon: <Sparkle size={24} weight="duotone" className="text-white" />,
@@ -68,7 +68,7 @@ const Showcase = () => {
                             Privacy as a <span className="text-gradient">Standard.</span>
                         </h1>
                         <p className="text-sm md:text-base text-zinc-500 max-w-lg mx-auto leading-relaxed">
-                            No accounts. No logs. No persistence. Experience truly ephemeral end-to-end encrypted messaging designed for the modern web.
+                            No accounts. No logs. No persistence. Experience truly ephemeral real-time messaging designed for the modern web.
                         </p>
                     </div>
                     <div className="flex flex-row gap-4 justify-center pt-2">
@@ -116,7 +116,7 @@ const Showcase = () => {
             <section className="relative z-10 max-w-6xl mx-auto px-6 py-12 md:px-12 w-full">
                 <div className="border border-zinc-900 bg-[#070709] p-10 md:p-16 rounded-3xl text-center relative overflow-hidden">
                     <div className="space-y-4 max-w-md mx-auto">
-                        <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight">Ready to chat secure?</h2>
+                        <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight">Ready to chat?</h2>
                         <p className="text-zinc-500 text-xs md:text-sm leading-relaxed">Join thousands of users who trust Chatty for their temporary conversations. No account needed, ever.</p>
                         <div className="flex flex-row gap-4 justify-center pt-2">
                             <Link to="/join" className="bg-white text-zinc-950 px-6 py-3 rounded-xl font-bold text-xs hover:bg-zinc-200 transition-all active:scale-95 font-geist-mono">
