@@ -21,7 +21,7 @@ const Showcase = () => {
         },
         {
             icon: <Sparkle size={24} weight="duotone" className="text-white" />,
-            title: "True Ephemeral Chat",
+            title: "No Strings Attached",
             description: "No accounts, no databases, no logs. Messages exist only for the duration of the session."
         },
         {
@@ -68,7 +68,7 @@ const Showcase = () => {
                             Privacy as a <span className="text-gradient">Standard.</span>
                         </h1>
                         <p className="text-sm md:text-base text-zinc-500 max-w-lg mx-auto leading-relaxed">
-                            No accounts. No logs. No persistence. Experience truly ephemeral real-time messaging designed for the modern web.
+                            No accounts. No logs. No persistence. Experience seamless real-time messaging designed for the modern web.
                         </p>
                     </div>
                     <div className="flex flex-row gap-4 justify-center pt-2">
