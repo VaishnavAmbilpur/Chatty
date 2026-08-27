@@ -48,7 +48,7 @@ const Chat = () => {
       : `${defaultWsUrl}${backendUrl}`;
 
     let socket: WebSocket | null = null;
-    let reconnectTimeout: NodeJS.Timeout | null = null;
+    let reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
     let isComponentMounted = true;
 
     const connect = () => {
