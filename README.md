@@ -60,14 +60,17 @@ sequenceDiagram
 
 ## 4. How Would You Scale It
 
-- **Redis Pub/Sub Layer**:
-  - Distribute backend across multiple Node.js instances behind a Layer 7 Load Balancer.
-  - Broadcast messages across instances using Redis Pub/Sub (`chat:room-id` channels).
-- **Shared In-Memory Cache (Redis Lists)**:
-  - Replace local server `Map` with Redis Lists using `LPUSH` and `LTRIM 0 49` for cross-node 50-message history retention.
-- **Connection Management & Heartbeats**:
-  - Enable sticky sessions (IP / Cookie routing) at the load balancer level.
-  - Implement 30-second ping/pong WebSocket heartbeats to prune dead socket connections.
+- **Redis Pub/Sub for Multi-Server Messaging**:
+  - Run multiple Node.js backend instances behind a Load Balancer.
+  - Use **Redis Pub/Sub** to broadcast messages between servers so users on different instances can chat seamlessly.
+- **Redis Cache for Shared History**:
+  - Move room history from server memory (`Map`) to **Redis Lists** (`LPUSH` + `LTRIM 0 49`).
+  - Allows any server instance to instantly fetch the last 50 messages for joining users.
+- **Load Balancer & Sticky Sessions**:
+  - Use NGINX or AWS ALB for Layer 7 load balancing with sticky sessions for WebSocket connections.
+- **WebSocket Heartbeats (Ghost Socket Cleanup)**:
+  - Send 30-second `ping` frames and verify `pong` responses to detect abrupt disconnects (Wi-Fi loss / lid close).
+  - Automatically terminate un-responding sockets (`ws.terminate()`) to prevent RAM leaks and stale user presence.
 
 ---
 
