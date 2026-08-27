@@ -1,9 +1,9 @@
-import './App.css'
-import Chat from './Components/Chat'
-import Hero from './Components/Hero'
-import Showcase from './Components/Showcase'
-import { BrowserRouter, Route, Routes } from 'react-router'
-import { Toaster } from 'react-hot-toast'
+import "./App.css";
+import Chat from "./Components/Chat";
+import Hero from "./Components/Hero";
+import Showcase from "./Components/Showcase";
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -13,35 +13,34 @@ function App() {
         reverseOrder={false}
         toastOptions={{
           style: {
-            background: '#18181b',
-            color: '#fff',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '1rem',
-            padding: '12px 20px',
-            fontSize: '14px',
-            fontWeight: '500',
-            fontFamily: 'Josefin Sans, sans-serif'
+            background: "#18181b",
+            color: "#fff",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "1rem",
+            padding: "12px 20px",
+            fontSize: "14px",
+            fontWeight: "500",
+            fontFamily: "Josefin Sans, sans-serif",
           },
           success: {
             iconTheme: {
-              primary: '#fff',
-              secondary: '#18181b',
+              primary: "#fff",
+              secondary: "#18181b",
             },
           },
           error: {
             iconTheme: {
-              primary: '#ef4444',
-              secondary: '#fff',
+              primary: "#ef4444",
+              secondary: "#fff",
             },
           },
         }}
       />
+
       <BrowserRouter>
         <Routes>
-          <Route
-            path="/"
-            element={<Showcase />}
-          />
+          <Route path="/" element={<Showcase />} />
+
           <Route
             path="/join"
             element={
@@ -50,6 +49,7 @@ function App() {
               </div>
             }
           />
+
           <Route
             path="/chat"
             element={
@@ -64,4 +64,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
