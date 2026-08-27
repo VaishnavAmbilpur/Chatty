@@ -1,90 +1,88 @@
 # Chatty
 
-A modern, high-performance, and privacy-focused real-time chat application with temporary rooms.
+## 1. Problem & Solution
+
+### Problem
+- **High Friction for Temporary Communication**: Standard messaging platforms force user registration, email verification, and authentication setup just to have a quick, disposable conversation.
+- **Permanent Data Exposure & Privacy Risks**: Messages are continuously saved to persistent databases, creating privacy risks and unwanted digital trails for temporary or sensitive discussions.
+- **High Latency & Infrastructure Overhead**: Traditional HTTP-based polling and database read/writes add latency and unnecessary server costs for transient, real-time messages.
+
+### Solution
+- **Zero-Auth Disposable Chat Rooms**: Users enter a Room ID and handle to join instantly without sign-ups, passwords, or persistent profiles.
+- **Pure In-Memory Ephemeral Storage**: Zero database dependence; room data lives strictly in server RAM and is completely wiped when users leave.
+- **Sub-Millisecond WebSocket Architecture**: Full-duplex WebSocket connection paired with an in-memory 50-message rolling buffer for instant message delivery and minimal server overhead.
 
 ---
 
-## Key Features & Implementation
+## 2. Flow of Execution
 
-### 1. Chat History & Rolling Message Cap
-**Feature:** See what was discussed before you joined, and maintain a rolling window of 50 messages.
-- **How it's implemented:**
-  - **Server-Side Caching**: The Node.js backend maintains a `Map` of the last 50 message objects per room in memory.
-  - **Client-Side Rolling Window**: The frontend maintains a strict rolling limit of 50 messages. If messages in the active room exceed 50, the oldest message is shifted out of state/memory.
-  - **History Preservation**: Messages are stored in memory, so users joining later can catch up on the conversation.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client as Client (React + Zustand)
+    participant Server as Node.js Backend (ws)
+    participant State as In-Memory State (Map)
 
-### 2. Glassmorphic UI & Premium UX
-- **Feature:** A stunning "frosted glass" aesthetic with smooth transitions and compact desktop layouts.
-- **How it's implemented:**
-  - **Tailwind CSS & DaisyUI**: Core styling using modern utility classes and the DaisyUI component library.
-  - **Backdrop Blur**: Advanced CSS `backdrop-filter` effects for the premium "glass" look.
-  - **Micro-Animations**: Custom CSS keyframes (Fade-In-Up, Scale-In) for a fluid feel.
-  - **Compact Layouts (Medium UI)**: Balanced sizing of UI elements on the Join and Chat components (optimized headers, padding, buttons, fields, and sidebar widths) for a professional dashboard experience.
-
-### 3. Rich Markdown Support
-**Feature:** Send code blocks, bold text, lists, and links.
-- **How it's implemented:**
-  - **React-Markdown**: Parses message strings into React components.
-  - **Tailwind Typography (@tailwindcss/typography)**: Provides the `prose` classes to beautifully style technical content (code, blockquotes, etc.).
-
-### 4. Real-Time Presence & Typing
-**Feature:** Live "Online" status and "Typing..." indicators.
-- **How it's implemented:**
-  - **WebSockets (ws)**: A full-duplex communication channel between client and server.
-  - **Zustand**: Lightweight global state management to handle room data and user status across components.
+    Client->>Server: Open WebSocket Connection (wss://)
+    Client->>Server: Send "join" Event { roomId, name }
+    Server->>State: Register Socket & Assign Admin (if 1st user)
+    State-->>Server: Retrieve Room History (Last 50 msgs)
+    Server-->>Client: Send "history" Event { messages }
+    Server-->>Client: Broadcast "presence" Event { userList }
+    
+    Client->>Server: Send "chat" Event { text }
+    Server->>State: Append Message & Cap Array at 50
+    Server-->>Client: Broadcast "chat" Event to Room
+    
+    Client->>Server: Socket Disconnect (Close Tab)
+    Server->>State: Remove User & Auto-Promote Next Admin
+    Server-->>Client: Broadcast Updated "presence" Event
+```
 
 ---
 
-## Tech Stack
+## 3. Important Architectural Tradeoffs
 
-### Frontend
-- **Framework**: React 18 + Vite (TypeScript)
-- **Styling**: Tailwind CSS, DaisyUI
-- **Icons**: Phosphor Icons
-- **State Management**: Zustand
+- **In-Memory Storage (`Map`) vs Database**:
+  - *Gain*: 0ms database latency and maximum user privacy.
+  - *Loss*: All messages wipe on server restart or when room empties.
+- **Native WebSockets (`ws`) vs Socket.IO**:
+  - *Gain*: Zero library overhead and low memory footprint.
+  - *Loss*: Manual implementation of event framing, heartbeats, and reconnect logic.
+- **50-Message Rolling Buffer vs Unlimited History**:
+  - *Gain*: Strictly capped memory footprint per room.
+  - *Loss*: Early messages are discarded when room message count exceeds 50.
+- **Stateful WS Connections vs Serverless Architecture**:
+  - *Gain*: Persistent open TCP connection for instant push updates.
+  - *Loss*: Requires sticky sessions and event brokers for multi-server scaling.
+
+---
+
+## 4. How Would You Scale It
+
+- **Redis Pub/Sub Layer**:
+  - Distribute backend across multiple Node.js instances behind a Layer 7 Load Balancer.
+  - Broadcast messages across instances using Redis Pub/Sub (`chat:room-id` channels).
+- **Shared In-Memory Cache (Redis Lists)**:
+  - Replace local server `Map` with Redis Lists using `LPUSH` and `LTRIM 0 49` for cross-node 50-message history retention.
+- **Connection Management & Heartbeats**:
+  - Enable sticky sessions (IP / Cookie routing) at the load balancer level.
+  - Implement 30-second ping/pong WebSocket heartbeats to prune dead socket connections.
+
+---
+
+## Quick Start
 
 ### Backend
-- **Environment**: Node.js
-- **Language**: TypeScript
-- **Communication**: WebSockets (ws)
-- **Runtime**: Nodemon (Development)
-
----
-
-## Getting Started
-
-### 1. Backend Setup
 ```bash
 cd Real-time-Chat
 npm install
 npm run dev
 ```
 
-### 2. Frontend Setup
+### Frontend
 ```bash
 cd "Real-Time-Chat FrontEnd"
 npm install
 npm run dev
 ```
-
----
-
-## Deployment
-
-### 1. Backend (Render)
-- **Environment**: Node
-- **Build Command**: `npm install && npm run build`
-- **Start Command**: `npm start`
-- **Environment Variables**:
-  - `PORT`: 8080 (Render usually provides this)
-  - `URL`: Your Render app URL (e.g., `https://chatty-backend.onrender.com`) - *Used for self-ping to prevent sleeping.*
-
-### 2. Frontend (Vercel)
-- **Framework Preset**: Vite
-- **Root Directory**: `Real-Time-Chat FrontEnd`
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Environment Variables**:
-  - `VITE_WS_URL`: Your Render backend URL (e.g., `chatty-backend.onrender.com`) - *Do not include ws:// or wss://, the app handles it.*
-
----
